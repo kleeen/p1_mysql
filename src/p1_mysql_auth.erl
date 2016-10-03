@@ -92,6 +92,8 @@ do_new_auth(Sock, RecvPid, SeqNum, User, Password, Salt1, Salt2, LogFun) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+password_old([], _Salt) -> <<>>;
+password_old(<<"">>, _Salt) -> <<>>;
 
 password_old(Password, Salt) ->
     {P1, P2} = hash(Password),
@@ -175,6 +177,8 @@ bxor_binary(B1, B2) ->
 				   E1 bxor E2
 			   end, binary_to_list(B1), binary_to_list(B2))).
 
+password_new([], _Salt) -> <<>>;
+password_new(<<"">>, _Salt) -> <<>>;
 password_new(Password, Salt) ->
     Stage1 = crypto:hash(sha, Password),
     Stage2 = crypto:hash(sha, Stage1),
